@@ -12,7 +12,7 @@ $(function() {
     $('#szoom').html('#base {transform: scale(' + mag + ')}');
   })
   $('#size_x,#size_y').on('change', function(ev) {
-    $('#base').css(($(this).attr('id') == 'size_x') ? 'width' : 'height', parseInt($(this).val()) + 'px');
+    $('#base').css(($(this).attr('id') === 'size_x') ? 'width' : 'height', parseInt($(this).val()) + 'px');
   })
 
 
@@ -119,8 +119,8 @@ function resizebar(bar, target, hv, dir) {
   this.dir = dir;
   this.hv = hv;
   this.start = null;
-  this.attr = (hv == 'v') ? 'width' : 'height';
-  this.mouse = (hv == 'v') ? 'pageX' : 'pageY';
+  this.attr = (hv === 'v') ? 'width' : 'height';
+  this.mouse = (hv === 'v') ? 'pageX' : 'pageY';
   var self = this;
   $(bar).on('mousedown touchstart', function(ev) {
     self.sw = parseInt($(self.sel).css(self.attr)) - self.dir * ev.originalEvent[self.mouse];
@@ -128,7 +128,7 @@ function resizebar(bar, target, hv, dir) {
   });
   $('body')
   .on('mousemove touchmove', function(ev) {
-    if (self.start != self.sel) return true;
+    if (self.start !== self.sel) return true;
     var w = self.dir * ev.originalEvent[self.mouse] + self.sw;
     if (w < 100) return false;
     $(self.sel).css(self.attr, w + 'px');
