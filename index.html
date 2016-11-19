@@ -1,150 +1,169 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width">
-<title>MarkDownDiagram</title>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/mdg_draw.js"></script>
-<script type="text/javascript" src="js/mdg_edit.js"></script>
-<link rel="stylesheet" type="text/css" href="css/mdg.css">
-<style type="text/css">
-html,body{
-	width:100%;
-	height:100%;
-	margin:0 ;
-	padding:0 ;
-	box-sizing:border-box;
-	overflow:hidden ;
-	font-family:sans-serif ;
-}
-#main {
-	display:flex ;
-	flex-direction: row ;
-	width:100% ;
-	height:100% ;
-	background-color:#222 ;
-	color:white;
-}
-#edit {
-	width:30% ;
-	height:100% ;
-	display:flex ;
-	flex-direction:column ;
-}
-#view {
-	height:100% ;
-	flex-grow:1;
-	display:flex ;
-	flex-direction: column ;
-}
-#control {
-	margin-left:1rem ;
-}
-#vbase {
-	height:100% ;
-	position:relative ;
-}
-#rollbase {
-	position:absolute ;
-	top:5px ;
-	right:5px;
-	bottom:5px;
-	left:5px; 
-	overflow:scroll ;	
-}
-#base {
-	display:block ;
-	font-family:sans-serif;
-	background-color:#eef ;
-	transform-origin:0 0 ;
-	color:black ;
-}
-#sbase {
-	 flex-grow:1;
-	 position:relative ;
-}
-#source {
-	position:absolute;
-	width:calc(100% - 15px) ;
-	height:calc(100% - 15px) ;
-	left:5px ;
-	top:5px ;
-	bottom:5px ;
-	font-size:1rem ;
-	font-family:monospace,sans-serif ;
-}
-#exp_src {
-	display:none ;
-}
-#i_fname {
-	width:10rem ;
-}
-input,button {
-	font-size:1rem ;
-}
-input[type=range] {
-	width:300px ;
-	background-color:#ccc;
-}
-div.resbar_h {
-	width:4px ;
-	background-color:#ccc ;
-	cursor:col-resize ;
-	user-select: none;
-}
-div.mdiv {
-	margin:5px ;
-}
-</style>
-<style id=szoom>
-#base {
-	transform: scale(1.0);	
-}
-</style>
-<style>
-@page {
-	size: A4 landscape ;
-	margin: 0;
-}
-
-@media print {
-	body {
-		width:297mm ;	
-	}
-	#main {
-		background-color:white ;		
-	}
-	#edit {
-		display:none ;
-	}
-	#view {
-		width:100% ;
-	}
-	#control {
-		display:none ;
-	}
-	#rb {
-		display:none ;
-	}
-	#base {
-		width:calc(100% - 10mm) ;
-		margin:5mm ;
-		padding:0 ;
-		background-color:white ;
-		transform: scale(0.37) ;
-	}
-}
-</style>
-<link rel="stylesheet" type="text/css" href="css/custom.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width">
+  <title>MarkDownDiagram</title>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/mdg_draw.js"></script>
+  <script type="text/javascript" src="js/mdg_edit.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/mdg.css">
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    
+    #main {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+      background-color: #222;
+      color: white;
+    }
+    
+    #edit {
+      width: 30%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #view {
+      height: 100%;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #control {
+      margin-left: 1rem;
+    }
+    
+    #vbase {
+      height: 100%;
+      position: relative;
+    }
+    
+    #rollbase {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      bottom: 5px;
+      left: 5px;
+      overflow: scroll;
+    }
+    
+    #base {
+      display: block;
+      font-family: sans-serif;
+      background-color: #eef;
+      transform-origin: 0 0;
+      color: black;
+    }
+    
+    #sbase {
+      flex-grow: 1;
+      position: relative;
+    }
+    
+    #source {
+      position: absolute;
+      width: calc(100% - 15px);
+      height: calc(100% - 15px);
+      left: 5px;
+      top: 5px;
+      bottom: 5px;
+      font-size: 1rem;
+      font-family: monospace, sans-serif;
+    }
+    
+    #exp_src {
+      display: none;
+    }
+    
+    #i_fname {
+      width: 10rem;
+    }
+    
+    input,
+    button {
+      font-size: 1rem;
+    }
+    
+    input[type=range] {
+      width: 300px;
+      background-color: #ccc;
+    }
+    
+    div.resbar_h {
+      width: 4px;
+      background-color: #ccc;
+      cursor: col-resize;
+      user-select: none;
+    }
+    
+    div.mdiv {
+      margin: 5px;
+    }
+  </style>
+  <style id=szoom>
+    #base {
+      transform: scale(1.0);
+    }
+  </style>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    
+    @media print {
+      body {
+        width: 297mm;
+      }
+      #main {
+        background-color: white;
+      }
+      #edit {
+        display: none;
+      }
+      #view {
+        width: 100%;
+      }
+      #control {
+        display: none;
+      }
+      #rb {
+        display: none;
+      }
+      #base {
+        width: calc(100% - 10mm);
+        margin: 5mm;
+        padding: 0;
+        background-color: white;
+        transform: scale(0.37);
+      }
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
 </head>
-<body>
-<div id=main>
-<section id=edit>
-<div> MarkDownDiagram v0.1</div>
 
-<div id=sbase>
-<textarea id=source>
+<body>
+  <div id=main>
+    <section id=edit>
+      <div> MarkDownDiagram v0.1</div>
+
+      <div id=sbase>
+        <textarea id=source>
 //[name]はブロックの定義
 //--- はテーブル行の区切り
 //==> はブロック間のリンク
@@ -189,26 +208,27 @@ block6
 
 
 </textarea>
-</div>
-<div class="mdiv">
-<div>filename:<input type=text id=i_fname value="sample.mdg" /></div>
-<button id=b_load>LOAD</button>
-<input type=file id=f_load style="display:none" />
-<a href="" id=l_save target="_blank"><button id=b_save>SAVE</button></a>
-</div>
-</section>
-<div class=resbar_h id="rb"></div>
-<section id=view>
-<section id=control>
-zoom:<input type=range id=zoom min=25 max=200 value=100>
-width:<input type=text id=size_x size=6 value=2900> height:<input type=text id=size_y size=6 value=2000>
-</section>
-<div id=vbase>
-<div id=rollbase>
-<div id=base class=mdg><svg id=mdg_svg></svg></div>
-</div>
-</div>
-</section>
-</div>
+      </div>
+      <div class="mdiv">
+        <div>filename:<input type=text id=i_fname value="sample.mdg" /></div>
+        <button id=b_load>LOAD</button>
+        <input type=file id=f_load style="display:none" />
+        <a href="" id=l_save target="_blank"><button id=b_save>SAVE</button></a>
+      </div>
+    </section>
+    <div class=resbar_h id="rb"></div>
+    <section id=view>
+      <section id=control>
+        zoom:<input type=range id=zoom min=25 max=200 value=100> width:
+        <input type=text id=size_x size=6 value=2900> height:<input type=text id=size_y size=6 value=2000>
+      </section>
+      <div id=vbase>
+        <div id=rollbase>
+          <div id=base class=mdg><svg id=mdg_svg></svg></div>
+        </div>
+      </div>
+    </section>
+  </div>
 </body>
+
 </html>
