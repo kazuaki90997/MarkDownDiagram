@@ -3,7 +3,9 @@ $(function() {
   new resizebar('#rb', '#edit', 'v', 1);
 
   var mag = 1.0;
-  $('#base').css('width', '2900px').css('height', '2000px');
+  $('#base')
+  .css('width', '2900px')
+  .css('height', '2000px');
 
   $('#zoom').on('input', function() {
     mag = $(this).val() / 100;
@@ -55,9 +57,11 @@ $(function() {
     //		console.log(oe.pageX+'/'+oe.pageY);
     ev.originalEvent.dataTransfer.setData('text', $(this).attr('id') + '/' + oe.pageX + '/' + oe.pageY);
   })
-  $('#base').on('dragenter dragover', function() {
+  $('#base')
+  .on('dragenter dragover', function() {
     return false;
-  }).on('drop', function(ev) {
+  })
+  .on('drop', function(ev) {
     //		console.log('drop') ;
     var oe = ev.originalEvent;
     var k = ev.originalEvent.dataTransfer.getData('text').split('/');
@@ -91,12 +95,12 @@ $(function() {
     var f = ev.originalEvent.target.files;
     var reader = new FileReader();
 
-    reader.onload = (function(e) {
+    reader.onload = function(e) {
       var src = e.target.result;
       $('#source').val(src);
       data = b.parse(src);
       b.setobj(data, true);
-    });
+    };
     $('#i_fname').val(f[0].name);
     reader.readAsText(f[0]);
   })
@@ -122,13 +126,15 @@ function resizebar(bar, target, hv, dir) {
     self.sw = parseInt($(self.sel).css(self.attr)) - self.dir * ev.originalEvent[self.mouse];
     self.start = self.sel;
   });
-  $('body').on('mousemove touchmove', function(ev) {
+  $('body')
+  .on('mousemove touchmove', function(ev) {
     if (self.start != self.sel) return true;
     var w = self.dir * ev.originalEvent[self.mouse] + self.sw;
     if (w < 100) return false;
     $(self.sel).css(self.attr, w + 'px');
     return false;
-  }).on('mouseup touchend', function() {
+  })
+  .on('mouseup touchend', function() {
     self.start = null;
   })
 }
