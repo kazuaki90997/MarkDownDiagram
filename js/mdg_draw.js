@@ -1,7 +1,7 @@
 var mdg_draw = function(_base) {
 
   this.base = $(_base);
-  this.svg = $("svg", base);
+  this.svg = $('svg', base);
   this.bpos = {};
   this.em = parseInt($('html').css('font-size'));
 
@@ -22,19 +22,19 @@ var mdg_draw = function(_base) {
   this.redraw = function(data, delay) {
     var s = [];
     for (var id in this.bpos) {
-      $('#' + id).css('left', this.bpos[id].x + "rem").css('top', this.bpos[id].y + "rem");
+      $('#' + id).css('left', this.bpos[id].x + 'rem').css('top', this.bpos[id].y + 'rem');
     }
     var base = this.base;
     setTimeout(function() {
       s = [];
       for (var i in data.conn) {
         var c = data.conn[i]
-        var l = connect($("#" + c.from), $("#" + c.to), c.param);
+        var l = connect($('#' + c.from), $('#' + c.to), c.param);
         if (l == null) continue;
         for (var j in l) s.push(l[j]);
       }
-      $("svg", base).remove();
-      base.append("<svg>" + s.join("") + "</svg>");
+      $('svg', base).remove();
+      base.append('<svg>' + s.join('') + '</svg>');
     }, (delay == true) ? 500 : 0);
 
   }
@@ -52,21 +52,21 @@ var mdg_draw = function(_base) {
 
   // create dom block 
   this.create = function(editable, box) {
-      var d = editable ? "true" : "false";
+      var d = editable ? 'true' : 'false';
       var type, inner;
-      if (typeof box.inner == "object" || box.title != null) {
-        if (typeof box.inner != "object") box.inner = [box.inner];
+      if (typeof box.inner == 'object' || box.title != null) {
+        if (typeof box.inner != 'object') box.inner = [box.inner];
         for (var tr in box.inner) {
-          var tt = box.inner[tr].split(" | ");
+          var tt = box.inner[tr].split(' | ');
           if (tt.length > 1) {
-            box.inner[tr] = tt.join("</td><td>");
+            box.inner[tr] = tt.join('</td><td>');
           }
         }
-        type = "<table>";
-        inner = "<tr><td>" + box.inner.join("</td></tr><tr><td>") + "</td></tr>";
-        if (box.title != null) inner = "<tr><th>" + box.title + "</th></tr>" + inner;
+        type = '<table>';
+        inner = '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
+        if (box.title != null) inner = '<tr><th>' + box.title + '</th></tr>' + inner;
       } else {
-        type = "<div>";
+        type = '<div>';
         inner = box.inner;
       }
       var pos = box.pos;
@@ -74,10 +74,10 @@ var mdg_draw = function(_base) {
         pos = lp;
       }
 
-      var e = $(type).addClass("box").attr('id', box.id).attr('title', box.id).
+      var e = $(type).addClass('box').attr('id', box.id).attr('title', box.id).
       attr('draggable', d).html(inner);
       if (box.cls) {
-        if (typeof box.cls == "string") box.cls = [box.cls];
+        if (typeof box.cls == 'string') box.cls = [box.cls];
         for (var i in box.cls) e.addClass(box.cls[i]);
       }
       this.base.append(e);
@@ -101,10 +101,10 @@ var mdg_draw = function(_base) {
       var d = $('th,td', o);
       if (t.length > 0 && f.match(/(l|r)([0-9]+)/)) {
         vy = 0;
-        if (RegExp.$1 == "l") {
+        if (RegExp.$1 == 'l') {
           px = sx;
           vx = -1;
-        } else if (RegExp.$1 == "r") {
+        } else if (RegExp.$1 == 'r') {
           px = sx + w;
           vx = 1;
         }
@@ -112,10 +112,10 @@ var mdg_draw = function(_base) {
         py = sy + t[tn].offsetTop + t[tn].offsetHeight / 2;
       } else if (d.length > 0 && f.match(/(u|d)([0-9]+)/)) {
         vx = 0;
-        if (RegExp.$1 == "u") {
+        if (RegExp.$1 == 'u') {
           py = sy;
           vy = -1;
-        } else if (RegExp.$1 == "d") {
+        } else if (RegExp.$1 == 'd') {
           py = sy + h;
           vy = 1;
         }
@@ -162,23 +162,23 @@ var mdg_draw = function(_base) {
     var ret = [];
     //  console.log(sp); 
     //  console.log(ep) ;
-    var style = 'stroke:' + ((param.col) ? param.col : "#000") + ';stroke-width:' + ((param.width) ? param.width : 1) + ';';
-    var cls = "";
+    var style = 'stroke:' + ((param.col) ? param.col : '#000') + ';stroke-width:' + ((param.width) ? param.width : 1) + ';';
+    var cls = '';
     if (param.cls) {
-      var c = param.cls.split(" ");
+      var c = param.cls.split(' ');
       var cc = [];
       for (var i in c) {
         if (c[i].match(/^S|B$/)) {
           param.type = c[i];
         } else cc.push(c[i]);
       }
-      if (cc.length > 0) cls = 'class="' + cc.join(" ") + '"';
+      if (cc.length > 0) cls = 'class="' + cc.join(' ') + '"';
     }
-    if (param.type == "S") {
-      ret.push(`<path d="M ${sp.x} ${sp.y} L ${ep.x} ${ep.y}" ${cls} />`);
+    if (param.type == 'S') {
+      ret.push(`<path d='M ${sp.x} ${sp.y} L ${ep.x} ${ep.y}' ${cls} />`);
     } else {
       var pm = 50;
-      ret.push(`<path d="M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x} ${ep.y}" ${cls} />`);
+      ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x} ${ep.y}' ${cls} />`);
     }
     if (param.arrow) {
       var th = 3.14159 * 20 / 180;
@@ -196,7 +196,7 @@ var mdg_draw = function(_base) {
       }
 
       function av(sp, ep) {
-        v = (param.type == "S") ? {
+        v = (param.type == 'S') ? {
           x: sp.x - ep.x,
           y: sp.y - ep.y
         } : {
@@ -205,10 +205,10 @@ var mdg_draw = function(_base) {
         };
         p1 = rot(v, th);
         p2 = rot(v, -th);
-        ret.push(`<path d="M ${round(ep.x+p1.x*an)} ${round(ep.y+p1.y*an)} L ${ep.x} ${ep.y} L ${round(ep.x+p2.x*an)} ${round(ep.y+p2.y*an)}" ${cls} style="stroke-dasharray:0" />`)
+        ret.push(`<path d='M ${round(ep.x+p1.x*an)} ${round(ep.y+p1.y*an)} L ${ep.x} ${ep.y} L ${round(ep.x+p2.x*an)} ${round(ep.y+p2.y*an)}' ${cls} style='stroke-dasharray:0' />`)
       }
-      if (param.arrow == "b" || param.arrow == "t") av(sp, ep);
-      if (param.arrow == "b" || param.arrow == "f") av(ep, sp);
+      if (param.arrow == 'b' || param.arrow == 't') av(sp, ep);
+      if (param.arrow == 'b' || param.arrow == 'f') av(ep, sp);
     }
     return ret // return {sp:sp,ep:ep} ;
   }
@@ -218,15 +218,15 @@ var mdg_draw = function(_base) {
   this.parse = function(text) {
     var box = [];
     var conn = [];
-    var l = text.split("\n");
+    var l = text.split('\n');
     var b = {
-      id: "",
+      id: '',
       bl: []
     };
     for (var i in l) {
       var cl = l[i];
       var a;
-      if (cl == "") continue;
+      if (cl == '') continue;
       if (this.m_comm.exec(cl)) {
         continue;
       } else
@@ -253,24 +253,24 @@ var mdg_draw = function(_base) {
       var m_sep = /^---*$/;
       var m_title = /^#(.*)/;
       var m_link = /^([u|d|l|r][0-9]*)?(<)?==?(?:\((.*)\))?==?(>)?([u|d|l|r][0-9]*)?\[([a-z0-9-_]+)\]([a-z])?$/i;
-      var m_ulink = /\?\[(.+)\](?:\(([^ ")]+)\s*(?:"(.+)")?\))?$/i;
-      var m_image = /\!\[(.+)\](?:\(([^ ")]+)\s*(?:"(.+)")?\))?/i;
+      var m_ulink = /\?\[(.+)\](?:\(([^ ')]+)\s*(?:'(.+)')?\))?$/i;
+      var m_image = /\!\[(.+)\](?:\(([^ ')]+)\s*(?:'(.+)')?\))?/i;
 
       var a;
       b.title = null;
       for (var i in b.bl) {
         var cl = b.bl[i];
         if (m_sep.exec(cl)) {
-          if (ll.length > 0) l.push(ll.join("<br/>"));
+          if (ll.length > 0) l.push(ll.join('<br/>'));
           ll = [];
         } else if (a = m_title.exec(cl)) {
           b.title = a[1];
         } else if (a = m_link.exec(cl)) {
-          if (ll.length > 0) l.push(ll.join("<br/>"));
+          if (ll.length > 0) l.push(ll.join('<br/>'));
           ll = [];
-          var fp = "r";
-          var tp = "l1";
-          var ar = (a[2] != undefined) ? ((a[4] != undefined) ? "b" : "f") : ((a[4] != undefined) ? "t" : "");
+          var fp = 'r';
+          var tp = 'l1';
+          var ar = (a[2] != undefined) ? ((a[4] != undefined) ? 'b' : 'f') : ((a[4] != undefined) ? 't' : '');
           if (a[1] != undefined) fp = a[1]
           if (a[5] != undefined) tp = a[5];
           conn.push({
@@ -285,21 +285,21 @@ var mdg_draw = function(_base) {
             }
           });
         } else if (a = m_image.exec(cl)) {
-          var im = (`<img src="${a[2]}" title="${a[1]}" />`);
+          var im = (`<img src='${a[2]}' title='${a[1]}' />`);
           if (a[3] != undefined) {
-            im = "<figure>" + im + "<figcaption>" + a[3] + "</figcaption></figure>";
+            im = '<figure>' + im + '<figcaption>' + a[3] + '</figcaption></figure>';
           }
           ll.push(im);
         } else {
           m_b = /\*\*(.+?)\*\*/g　;
           while ((m = m_b.exec(cl)) != null) {
-            cl = cl.replace(m[0], "<strong>" + m[1] + "</strong>");
+            cl = cl.replace(m[0], '<strong>' + m[1] + '</strong>');
           }
           ll.push(cl);
         }
       }
-      if (ll.length > 0) l.push(ll.join("<br/>"));
-      //    console.log("class="+b.cls) ;
+      if (ll.length > 0) l.push(ll.join('<br/>'));
+      //    console.log('class='+b.cls) ;
       if (l.length == 1) l = l[0];
       box.push({
         id: b.id,
@@ -315,19 +315,19 @@ var mdg_draw = function(_base) {
     };
   }
   this.upd_text = function(text) {
-    var l = text.split("\n");
+    var l = text.split('\n');
     for (var i in l) {
       var cl = l[i];
       var a;
-      if (cl == "") continue;
+      if (cl == '') continue;
       if (a = this.m_h.exec(cl)) {
         var pos = (this.bpos[a[1]] != undefined) ? this.bpos[a[1]] : {
           x: a[3],
           y: a[4]
         };
-        l[i] = "[" + a[1] + "]" + ((a[2] != undefined) ? " (" + a[2] + ")" : "") + " <" + pos.x + "," + pos.y + ">";
+        l[i] = '[' + a[1] + ']' + ((a[2] != undefined) ? ' (' + a[2] + ')' : '') + ' <' + pos.x + ',' + pos.y + '>';
       }
     }
-    return l.join("\n");
+    return l.join('\n');
   }
 }
