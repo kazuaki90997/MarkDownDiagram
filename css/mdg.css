@@ -31,6 +31,7 @@ div.mdg table td {
 	border:1px solid black ;
 }
 div.mdg table th {
+	padding:0.25em;
 	background-color:#eee ;
 	text-align: center ;
 }
