@@ -64,7 +64,7 @@ var mdg_draw = function(_base) {
         }
         type = '<table>';
         inner = '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
-        if (box.title !== null) inner = '<tr><th>' + box.title + '</th></tr>' + inner;
+        if (box.title !== null) inner = '<tr><th><span class="box-header-text">' + box.title + '</span></th></tr>' + inner;
       } else {
         type = '<div>';
         inner = box.inner;
@@ -234,6 +234,7 @@ var mdg_draw = function(_base) {
         if (b.bl.length > 0) {
           pbox(b);
         }
+        b.lineIndex = i;
         b.id = a[1];
         b.bl = [];
         b.cls = a[2];
@@ -291,10 +292,12 @@ var mdg_draw = function(_base) {
           }
           ll.push(im);
         } else {
+          lineIndex = parseInt(b.lineIndex, 10) + 1 + parseInt(i, 10);
           m_b = /\*\*(.+?)\*\*/g　;
           while ((m = m_b.exec(cl)) !== null) {
             cl = cl.replace(m[0], '<strong>' + m[1] + '</strong>');
           }
+          cl = `<span class="box-data-text" data-line-index="${lineIndex}">${cl}</span>`
           ll.push(cl);
         }
       }
@@ -330,4 +333,57 @@ var mdg_draw = function(_base) {
     }
     return l.join('\n');
   }
+
+  $(document).on('click', '.mdg .box-header-text', function() {
+    var tableId = $(this).parents('table').prop('title');
+    var tableReg = new RegExp('^\\[' + tableId + '\\]', 'm');
+    var $textarea = $('#source');
+    var textarea = $textarea[0];
+    var mdDocument = $textarea.val();
+
+    // ID定義の位置を特定
+    var match = mdDocument.match(tableReg);
+    if (!match && match.length === 0) return;
+    var boxDeclarationIndex = match.index;
+    var boxDeclarationLength = match[0].length;
+
+    // タイトル定義の位置を特定
+    var boxTitleLinePreviousIndex = mdDocument.indexOf('\n', boxDeclarationIndex + 1);
+    if (boxTitleLinePreviousIndex === -1) return;
+    boxTitleIndex = boxTitleLinePreviousIndex + 1 + 1; // line head + '#''
+    var boxTitleLength = mdDocument.indexOf('\n', boxTitleIndex + 1) - boxTitleIndex;
+
+    textarea.focus();
+    var totalLineCount = (mdDocument.match(/\n/g) || []).length;
+    // すでにタイトル定義を選択中ならID定義を選択
+    if (textarea.selectionStart === boxTitleIndex
+        &&
+        textarea.selectionEnd === boxTitleIndex + boxTitleLength) {
+      // ID定義を選択
+      var indexLineCount = (mdDocument.substring(0, boxDeclarationIndex).match(/\n/g) || []).length;
+      textarea.setSelectionRange(boxDeclarationIndex, boxDeclarationIndex + boxDeclarationLength);
+      textarea.scrollTop = textarea.scrollHeight * indexLineCount / totalLineCount;
+    } else {
+      // タイトル定義を選択
+      var indexLineCount = (mdDocument.substring(0, boxTitleIndex).match(/\n/g) || []).length;
+      textarea.setSelectionRange(boxTitleIndex, boxTitleIndex + boxTitleLength);
+      textarea.scrollTop = textarea.scrollHeight * indexLineCount / totalLineCount;
+    }
+  });
+
+  $(document).on('click', '.mdg .box-data-text', function() {
+    var lineIndex = $(this).data('lineIndex');
+    var $textarea = $('#source');
+    var textarea = $textarea[0];
+    var wordStartIndex = 0;
+    for (var i=0; i<lineIndex; i++) {
+      wordStartIndex = $textarea.val().indexOf('\n', wordStartIndex) + 1;
+    }
+    wordEndIndex = $textarea.val().indexOf('\n', wordStartIndex);
+
+    textarea.focus();
+    textarea.setSelectionRange(wordStartIndex, wordEndIndex);
+    textarea.scrollTop = lineIndex;
+  });
+
 }
