@@ -182,7 +182,7 @@ var mdg_draw = function(_base) {
       ret.push(`<path d='M ${sp.x} ${sp.y} H ${sp.x+sp.vx*5} L ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-bg')} />`);
       ret.push(`<path d='M ${sp.x} ${sp.y} H ${sp.x+sp.vx*5} L ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-fg')} />`);
     } else {
-      var pm = 50;
+      var pm = 30 + Math.abs(ep.x - sp.x) * 0.3;
       ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-bg')} />`);
       ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-fg')} />`);
     }
