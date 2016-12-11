@@ -63,7 +63,7 @@ var mdg_draw = function(_base) {
           }
         }
         type = '<table>';
-        inner = '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
+        inner = box.inner.length === 0 ? '' : '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
         if (box.title !== null) inner = '<tr><th><span class="box-header-text">' + box.title + '</span></th></tr>' + inner;
       } else {
         type = '<div>';
