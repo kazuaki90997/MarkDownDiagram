@@ -187,7 +187,7 @@ var mdg_draw = function(_base) {
       ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-fg')} />`);
     }
     if (param.arrow) {
-      var th = 3.14159 * 20 / 180;
+      var th = 3.14159 * 33 / 180;
       var an = 15;
       var v, p;
 
