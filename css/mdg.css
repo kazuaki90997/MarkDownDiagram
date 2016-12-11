@@ -38,9 +38,14 @@ div.mdg svg line {
 	stroke:#000 ;
 	stroke-width:2px ;
 }
-div.mdg svg path {
-	stroke:#000 ;
-	stroke-width:2px ;
+div.mdg svg .box-connector-bg {
+	stroke:#000000 ;
+	stroke-width:5.5px ;
+	fill:none ;
+}
+div.mdg svg .box-connector-fg {
+	stroke:#ffffff ;
+	stroke-width:4.0px ;
 	fill:none ;
 }
 figure {
