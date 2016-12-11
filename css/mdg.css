@@ -219,3 +219,17 @@ div.mdg .H3 {
 div.mdg .H4 {
 	height:4rem ;
 }
+
+/* box texts */
+.box-data-text {
+    cursor: pointer;
+}
+.box-data-text:hover {
+    text-decoration: underline;
+}
+.box-header-text {
+    cursor: pointer;
+}
+.box-header-text:hover {
+    text-decoration: underline;
+}
