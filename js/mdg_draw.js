@@ -63,7 +63,7 @@ var mdg_draw = function(_base) {
           }
         }
         type = '<table>';
-        inner = '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
+        inner = box.inner.length === 0 ? '' : '<tr><td>' + box.inner.join('</td></tr><tr><td>') + '</td></tr>';
         if (box.title !== null) inner = '<tr><th><span class="box-header-text">' + box.title + '</span></th></tr>' + inner;
       } else {
         type = '<div>';
@@ -163,25 +163,31 @@ var mdg_draw = function(_base) {
     //  console.log(sp); 
     //  console.log(ep) ;
     var style = 'stroke:' + ((param.col) ? param.col : '#000') + ';stroke-width:' + ((param.width) ? param.width : 1) + ';';
-    var cls = '';
+    var classNames = [];
     if (param.cls) {
       var c = param.cls.split(' ');
-      var cc = [];
       for (var i in c) {
         if (c[i].match(/^S|B$/)) {
           param.type = c[i];
-        } else cc.push(c[i]);
+        } else classNames.push(c[i]);
       }
-      if (cc.length > 0) cls = 'class="' + cc.join(' ') + '"';
+    }
+    function printTagClass(...classNames) {
+      if (!classNames) {
+        return ''
+      }
+      return `class="${ classNames.join(' ') }"`;
     }
     if (param.type === 'S') {
-      ret.push(`<path d='M ${sp.x} ${sp.y} L ${ep.x} ${ep.y}' ${cls} />`);
+      ret.push(`<path d='M ${sp.x} ${sp.y} H ${sp.x+sp.vx*5} L ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-bg')} />`);
+      ret.push(`<path d='M ${sp.x} ${sp.y} H ${sp.x+sp.vx*5} L ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-fg')} />`);
     } else {
-      var pm = 50;
-      ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x} ${ep.y}' ${cls} />`);
+      var pm = 30 + Math.abs(ep.x - sp.x) * 0.3;
+      ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-bg')} />`);
+      ret.push(`<path d='M ${sp.x} ${sp.y} C ${sp.x+sp.vx*pm} ${sp.y+sp.vy*pm} ${ep.x+ep.vx*pm} ${ep.y+ep.vy*pm} ${ep.x+ep.vx*15} ${ep.y} H ${ep.x+ep.vx*5}' ${printTagClass(...classNames, 'box-connector-fg')} />`);
     }
     if (param.arrow) {
-      var th = 3.14159 * 20 / 180;
+      var th = 3.14159 * 33 / 180;
       var an = 15;
       var v, p;
 
@@ -196,16 +202,13 @@ var mdg_draw = function(_base) {
       }
 
       function av(sp, ep) {
-        v = (param.type === 'S') ? {
-          x: sp.x - ep.x,
-          y: sp.y - ep.y
-        } : {
+        v = {
           x: ep.vx,
           y: ep.vy
         };
         p1 = rot(v, th);
         p2 = rot(v, -th);
-        ret.push(`<path d='M ${round(ep.x+p1.x*an)} ${round(ep.y+p1.y*an)} L ${ep.x} ${ep.y} L ${round(ep.x+p2.x*an)} ${round(ep.y+p2.y*an)}' ${cls} style='stroke-dasharray:0' />`)
+        ret.push(`<path d='M ${round(ep.x+p1.x*an)} ${round(ep.y+p1.y*an)} L ${ep.x} ${ep.y} L ${round(ep.x+p2.x*an)} ${round(ep.y+p2.y*an)}' ${printTagClass(classNames)} style='stroke-dasharray:0' />`)
       }
       if (param.arrow === 'b' || param.arrow === 't') av(sp, ep);
       if (param.arrow === 'b' || param.arrow === 'f') av(ep, sp);
