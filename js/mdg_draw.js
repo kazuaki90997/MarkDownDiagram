@@ -351,10 +351,11 @@ var mdg_draw = function(_base) {
     var boxDeclarationLength = match[0].length;
 
     // タイトル定義の位置を特定
-    var boxTitleLinePreviousIndex = mdDocument.indexOf('\n', boxDeclarationIndex + 1);
+    var boxTitleLinePreviousIndex = mdDocument.indexOf('#', boxDeclarationIndex);
     if (boxTitleLinePreviousIndex === -1) return;
-    boxTitleIndex = boxTitleLinePreviousIndex + 1 + 1; // line head + '#''
-    var boxTitleLength = mdDocument.indexOf('\n', boxTitleIndex + 1) - boxTitleIndex;
+    boxTitleIndex = boxTitleLinePreviousIndex + 1;
+    var boxTitleLineEndIndex = mdDocument.indexOf('\n', boxTitleIndex);
+    var boxTitleLength = (boxTitleLineEndIndex === -1 ? mdDocument.length : boxTitleLineEndIndex) - boxTitleIndex;
 
     textarea.focus();
     var totalLineCount = (mdDocument.match(/\n/g) || []).length;
