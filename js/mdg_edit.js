@@ -1,4 +1,13 @@
+var electron = require('electron');
+var remote = electron.remote;
+
 $(function() {
+
+  var filepath;
+  if (location.hash) {
+    filepath = decodeURIComponent(location.hash.substring(1));
+  }
+  document.title = (filepath || 'untitled') + ' - MarkDownDiagram';
 
   new resizebar('#rb', '#edit', 'v', 1);
 
@@ -17,13 +26,19 @@ $(function() {
 
 
   var b = new mdg_draw($('#base'));
-  var p = loadlocal();
-  if (p) {
-    $('#source').val(p.source);
-    $('#i_fname').val(p.fname);
+
+  if (filepath) {
+    var fs = remote.require('fs');
+    fs.readFile(filepath, 'utf-8', function(err, data) {
+      if (err) throw err;
+      loadSource(data);
+    });
+  } else {
+    var p = loadlocal();
+    if (p) {
+      loadSource(p.source);
+    }
   }
-  var data = b.parse($('#source').val());
-  b.setobj(data, true);
 
   function loadlocal() {
     var ret = null;
@@ -47,8 +62,7 @@ $(function() {
     //		console.log(data) ;
     b.setobj(data);
     savelocal({
-      'source': s,
-      'fname': $('#i_fname').val()
+      'source': s
     });
   })
   $(document).on('dragstart', '#base .box', function(ev) {
@@ -82,12 +96,16 @@ $(function() {
     var s = b.upd_text($('#source').val());
     $('#source').val(s);
     savelocal({
-      'source': s,
-      'fname': $('#i_fname').val()
+      'source': s
     });
     return false;
   })
 
+  function loadSource(source) {
+    data = b.parse(source);
+    b.setobj(data, true);
+    $('#source').val(source);
+  }
   $('#b_load').on('click', function() {
     $('#f_load').click();
   })
@@ -97,17 +115,34 @@ $(function() {
 
     reader.onload = function(e) {
       var src = e.target.result;
+      location.hash = encodeURIComponent(f[0].path);
+      document.title = f[0].path + ' - MarkDownDiagram';
       $('#source').val(src);
-      data = b.parse(src);
-      b.setobj(data, true);
+      loadSource(src);
     };
-    $('#i_fname').val(f[0].name);
     reader.readAsText(f[0]);
   })
   $('#l_save').on('click', function() {
-    $(this).attr('download', $('#i_fname').val());
-    $(this).attr('href', 'data:application/octet-stream;charset=UTF-8,' + encodeURIComponent($('#source').val()));
-    return true;
+    const {dialog} = remote;
+    var filepath;
+    if (location.hash) {
+      filepath = decodeURIComponent(location.hash.substring(1));
+    } else {
+      filepath = dialog.showSaveDialog(
+        {
+          defaultPath:  require("path").join(process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"], "untitled.mdg")
+        }
+      );
+      if (!filepath) return false;
+      location.hash = encodeURIComponent(filepath);
+      document.title = filepath + ' - MarkDownDiagram';
+    }
+    var fs = remote.require('fs');
+    fs.writeFile(filepath, $('#source').val(), (err) => {
+      if (err) throw err;
+
+    });
+    return false;
   })
 
 })

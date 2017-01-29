@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width">
   <title>MarkDownDiagram</title>
-  <script type="text/javascript" src="js/jquery.js"></script>
+  <script>window.jQuery = window.$ = require('./js/jquery.js');</script>
   <script type="text/javascript" src="js/mdg_draw.js"></script>
   <script type="text/javascript" src="js/mdg_edit.js"></script>
   <link rel="stylesheet" type="text/css" href="css/mdg.css">
@@ -88,10 +88,6 @@
     
     #exp_src {
       display: none;
-    }
-    
-    #i_fname {
-      width: 10rem;
     }
     
     input,
@@ -210,7 +206,7 @@ block6
 </textarea>
       </div>
       <div class="mdiv">
-        <div>filename:<input type=text id=i_fname value="sample.mdg" /></div>
+        <div style="display: none;">filename:<input type=text id=i_fname value="sample.mdg" /></div>
         <button id=b_load>LOAD</button>
         <input type=file id=f_load style="display:none" />
         <a href="" id=l_save target="_blank"><button id=b_save>SAVE</button></a>

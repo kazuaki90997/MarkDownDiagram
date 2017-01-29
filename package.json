@@ -1,0 +1,24 @@
+{
+  "name": "markdown-diaglam",
+  "version": "0.0.1",
+  "description": "Markdown風のテキストで、ER図やブロックダイアグラムのようなチャートを描けるツールです。",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-packager . MarkDownDiagram --platform=win32 --arch=x64 --version=1.4.15 --overwrite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazuaki90997/MarkDownDiagram.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kazuaki90997/MarkDownDiagram/issues"
+  },
+  "homepage": "https://github.com/kazuaki90997/MarkDownDiagram#readme",
+  "devDependencies": {
+    "electron": "^1.4.15",
+    "electron-packager": "^8.5.1"
+  }
+}
